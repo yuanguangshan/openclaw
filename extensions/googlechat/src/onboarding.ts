@@ -1,7 +1,8 @@
-import type { OpenClawConfig, DmPolicy } from "openclaw/plugin-sdk";
+import type { OpenClawConfig, DmPolicy } from "openclaw/plugin-sdk/googlechat";
 import {
   addWildcardAllowFrom,
   formatDocsLink,
+  mergeAllowFromEntries,
   promptAccountId,
   type ChannelOnboardingAdapter,
   type ChannelOnboardingDmPolicy,
@@ -9,7 +10,7 @@ import {
   DEFAULT_ACCOUNT_ID,
   normalizeAccountId,
   migrateBaseNameToDefaultAccount,
-} from "openclaw/plugin-sdk";
+} from "openclaw/plugin-sdk/googlechat";
 import {
   listGoogleChatAccountIds,
   resolveDefaultGoogleChatAccountId,
@@ -61,7 +62,7 @@ async function promptAllowFrom(params: {
     validate: (value) => (String(value ?? "").trim() ? undefined : "Required"),
   });
   const parts = parseAllowFromInput(String(entry));
-  const unique = [...new Set(parts)];
+  const unique = mergeAllowFromEntries(undefined, parts);
   return {
     ...params.cfg,
     channels: {
